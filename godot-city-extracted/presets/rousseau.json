@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Emile's Garden",
+    "author": "Jean-Jacques Rousseau",
+    "year": 1762,
+    "genre": "essay",
+    "language": "french"
+  },
+  "topology": {
+    "gridSize": 6,
+    "blockSize": 30,
+    "roadWidth": 2,
+    "layoutType": "organic",
+    "connectivity": 0.3
+  },
+  "architecture": {
+    "style": "classical",
+    "buildingHeightRange": {
+      "min": 5,
+      "max": 15
+    },
+    "skyscraperRatio": 0.0,
+    "buildingDensity": 0.25,
+    "blockSubdivisions": 1,
+    "material": "wood"
+  },
+  "color": {
+    "dominantHue": 120,
+    "saturationBase": 40,
+    "brightnessBase": 50,
+    "accentHueShift": 15
+  },
+  "life": {
+    "timeOfDay": "dawn",
+    "fogDensity": 0.15,
+    "windSpeed": 0.4,
+    "particleType": "leaves",
+    "particleCount": 40,
+    "windowLightFrequency": 0.3
+  },
+  "nature": {
+    "terrainRoughness": 0.2,
+    "waterPresence": 0.4,
+    "treeDensity": 0.8,
+    "vegetationType": "deciduous",
+    "parkRatio": 0.5
+  }
+}

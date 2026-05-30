@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Yasnaya Polyana",
+    "author": "Leo Tolstoy",
+    "year": 1878,
+    "genre": "autobiography",
+    "language": "russian"
+  },
+  "topology": {
+    "gridSize": 12,
+    "blockSize": 22,
+    "roadWidth": 2,
+    "layoutType": "organic",
+    "connectivity": 0.5
+  },
+  "architecture": {
+    "style": "classical",
+    "buildingHeightRange": {
+      "min": 6,
+      "max": 20
+    },
+    "skyscraperRatio": 0.05,
+    "buildingDensity": 0.4,
+    "blockSubdivisions": 1,
+    "material": "wood"
+  },
+  "color": {
+    "dominantHue": 100,
+    "saturationBase": 35,
+    "brightnessBase": 40,
+    "accentHueShift": 20
+  },
+  "life": {
+    "timeOfDay": "golden_hour",
+    "fogDensity": 0.1,
+    "windSpeed": 0.8,
+    "particleType": "leaves",
+    "particleCount": 80,
+    "windowLightFrequency": 0.5
+  },
+  "nature": {
+    "terrainRoughness": 0.3,
+    "waterPresence": 0.3,
+    "treeDensity": 0.6,
+    "vegetationType": "deciduous",
+    "parkRatio": 0.35
+  }
+}

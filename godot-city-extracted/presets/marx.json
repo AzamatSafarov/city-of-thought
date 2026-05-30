@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Industrial Capital",
+    "author": "Karl Marx",
+    "year": 1867,
+    "genre": "treatise",
+    "language": "german"
+  },
+  "topology": {
+    "gridSize": 20,
+    "blockSize": 15,
+    "roadWidth": 4,
+    "layoutType": "grid",
+    "connectivity": 0.8
+  },
+  "architecture": {
+    "style": "constructivist",
+    "buildingHeightRange": {
+      "min": 10,
+      "max": 50
+    },
+    "skyscraperRatio": 0.3,
+    "buildingDensity": 0.9,
+    "blockSubdivisions": 2,
+    "material": "concrete"
+  },
+  "color": {
+    "dominantHue": 10,
+    "saturationBase": 30,
+    "brightnessBase": 20,
+    "accentHueShift": 30
+  },
+  "life": {
+    "timeOfDay": "night",
+    "fogDensity": 0.5,
+    "windSpeed": 2.0,
+    "particleType": "sparks",
+    "particleCount": 150,
+    "windowLightFrequency": 0.2
+  },
+  "nature": {
+    "terrainRoughness": 0.1,
+    "waterPresence": 0.15,
+    "treeDensity": 0.05,
+    "vegetationType": "dead",
+    "parkRatio": 0.03
+  }
+}

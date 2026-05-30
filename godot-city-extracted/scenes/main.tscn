@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://main_scene_city"]
+
+[ext_resource type="Script" path="res://scripts/city_manager.gd" id="1_city"]
+
+[sub_resource type="Environment" id="Environment_default"]
+background_mode = 1
+background_color = Color(0.85, 0.88, 0.92, 1)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_city")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.6, -0.4, 0.7, 0, 0.87, 0.5, -0.8, -0.3, 0.5, 300, 200, 350)
+fov = 50.0

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "City of Gessen",
+    "author": "Sergei Gessen",
+    "year": 1925,
+    "genre": "treatise",
+    "language": "russian"
+  },
+  "topology": {
+    "gridSize": 14,
+    "blockSize": 20,
+    "roadWidth": 3,
+    "layoutType": "grid",
+    "connectivity": 0.75
+  },
+  "architecture": {
+    "style": "classical",
+    "buildingHeightRange": {
+      "min": 8,
+      "max": 40
+    },
+    "skyscraperRatio": 0.2,
+    "buildingDensity": 0.8,
+    "blockSubdivisions": 2,
+    "material": "stone"
+  },
+  "color": {
+    "dominantHue": 215,
+    "saturationBase": 20,
+    "brightnessBase": 30,
+    "accentHueShift": 30
+  },
+  "life": {
+    "timeOfDay": "dusk",
+    "fogDensity": 0.3,
+    "windSpeed": 0.6,
+    "particleType": "dust",
+    "particleCount": 60,
+    "windowLightFrequency": 0.4
+  },
+  "nature": {
+    "terrainRoughness": 0.15,
+    "waterPresence": 0.2,
+    "treeDensity": 0.25,
+    "vegetationType": "deciduous",
+    "parkRatio": 0.1
+  }
+}

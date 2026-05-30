@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Zarathustra's Citadel",
+    "author": "Friedrich Nietzsche",
+    "year": 1883,
+    "genre": "poetry",
+    "language": "german"
+  },
+  "topology": {
+    "gridSize": 8,
+    "blockSize": 30,
+    "roadWidth": 5,
+    "layoutType": "organic",
+    "connectivity": 0.4
+  },
+  "architecture": {
+    "style": "baroque",
+    "buildingHeightRange": {
+      "min": 15,
+      "max": 60
+    },
+    "skyscraperRatio": 0.5,
+    "buildingDensity": 0.6,
+    "blockSubdivisions": 1,
+    "material": "metal"
+  },
+  "color": {
+    "dominantHue": 5,
+    "saturationBase": 70,
+    "brightnessBase": 25,
+    "accentHueShift": -170
+  },
+  "life": {
+    "timeOfDay": "midnight",
+    "fogDensity": 0.2,
+    "windSpeed": 4.0,
+    "particleType": "embers",
+    "particleCount": 120,
+    "windowLightFrequency": 0.6
+  },
+  "nature": {
+    "terrainRoughness": 0.6,
+    "waterPresence": 0.1,
+    "treeDensity": 0.05,
+    "vegetationType": "dead",
+    "parkRatio": 0.05
+  }
+}

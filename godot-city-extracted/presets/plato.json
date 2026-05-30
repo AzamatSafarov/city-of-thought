@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "City of Plato",
+    "author": "Plato",
+    "year": -380,
+    "genre": "dialogue",
+    "language": "greek"
+  },
+  "topology": {
+    "gridSize": 10,
+    "blockSize": 25,
+    "roadWidth": 4,
+    "layoutType": "radial",
+    "connectivity": 0.6
+  },
+  "architecture": {
+    "style": "classical",
+    "buildingHeightRange": {
+      "min": 10,
+      "max": 25
+    },
+    "skyscraperRatio": 0.05,
+    "buildingDensity": 0.5,
+    "blockSubdivisions": 1,
+    "material": "marble"
+  },
+  "color": {
+    "dominantHue": 55,
+    "saturationBase": 15,
+    "brightnessBase": 55,
+    "accentHueShift": 20
+  },
+  "life": {
+    "timeOfDay": "day",
+    "fogDensity": 0.0,
+    "windSpeed": 0.2,
+    "particleType": "none",
+    "particleCount": 0,
+    "windowLightFrequency": 0.2
+  },
+  "nature": {
+    "terrainRoughness": 0.05,
+    "waterPresence": 0.4,
+    "treeDensity": 0.15,
+    "vegetationType": "deciduous",
+    "parkRatio": 0.3
+  }
+}

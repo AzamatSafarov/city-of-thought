@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://baroque_cathedral"]
+
+[sub_resource type="StandardMaterial3D" id="marble_mat"]
+albedo_color = Color(0.95, 0.88, 0.82, 1)
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="body"]
+size = Vector3(8, 15, 6)
+
+[sub_resource type="SphereMesh" id="dome"]
+radius = 4.5
+height = 6
+is_hemisphere = true
+
+[sub_resource type="CylinderMesh" id="spire"]
+top_radius = 0.1
+bottom_radius = 0.8
+height = 6
+
+[sub_resource type="TorusMesh" id="volute"]
+inner_radius = 0.5
+outer_radius = 0.8
+
+[node name="BaroqueCathedral" type="Node3D"]
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("body")
+material_override = SubResource("marble_mat")
+position = Vector3(0, 7.5, 0)
+
+[node name="Dome" type="MeshInstance3D" parent="."]
+mesh = SubResource("dome")
+material_override = SubResource("marble_mat")
+position = Vector3(0, 18, 0)
+
+[node name="Spire" type="MeshInstance3D" parent="."]
+mesh = SubResource("spire")
+material_override = SubResource("marble_mat")
+position = Vector3(0, 22, 0)
+
+[node name="Volute1" type="MeshInstance3D" parent="."]
+mesh = SubResource("volute")
+material_override = SubResource("marble_mat")
+position = Vector3(-4.5, 5, 3)
+
+[node name="Volute2" type="MeshInstance3D" parent="."]
+mesh = SubResource("volute")
+material_override = SubResource("marble_mat")
+position = Vector3(4.5, 5, 3)

@@ -1,0 +1,71 @@
+[gd_scene load_steps=3 format=3 uid="uid://ui1234567890"]
+
+[ext_resource type="Script" path="res://scripts/ui_manager.gd" id="1_ui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.96, 0.94, 0.9, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.75, 0.7, 0.5)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 8
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_ui")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -320.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 180.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+modulate = Color(0.3, 0.3, 0.4, 1)
+text = "City of Thought"
+horizontal_alignment = 1
+
+[node name="Meta" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.5, 0.5, 0.6, 1)
+text = "Click a building to explore"
+horizontal_alignment = 1
+
+[node name="Concepts" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+modulate = Color(0.6, 0.6, 0.7, 1)
+text = ""
+autowrap_mode = 3
+
+[node name="Instructions" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+modulate = Color(0.5, 0.5, 0.6, 0.7)
+text = "Drag to orbit / Scroll to zoom / Click building to inspect"
+horizontal_alignment = 1

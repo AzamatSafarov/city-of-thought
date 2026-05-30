@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "The Castle",
+    "author": "Franz Kafka",
+    "year": 1926,
+    "genre": "treatise",
+    "language": "german"
+  },
+  "topology": {
+    "gridSize": 16,
+    "blockSize": 18,
+    "roadWidth": 2,
+    "layoutType": "grid",
+    "connectivity": 0.9
+  },
+  "architecture": {
+    "style": "deconstructivist",
+    "buildingHeightRange": {
+      "min": 12,
+      "max": 35
+    },
+    "skyscraperRatio": 0.15,
+    "buildingDensity": 0.95,
+    "blockSubdivisions": 3,
+    "material": "concrete"
+  },
+  "color": {
+    "dominantHue": 200,
+    "saturationBase": 5,
+    "brightnessBase": 15,
+    "accentHueShift": 10
+  },
+  "life": {
+    "timeOfDay": "midnight",
+    "fogDensity": 0.8,
+    "windSpeed": 1.0,
+    "particleType": "ash",
+    "particleCount": 200,
+    "windowLightFrequency": 0.1
+  },
+  "nature": {
+    "terrainRoughness": 0.05,
+    "waterPresence": 0.05,
+    "treeDensity": 0.02,
+    "vegetationType": "dead",
+    "parkRatio": 0.02
+  }
+}

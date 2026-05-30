@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://classical_monument"]
+
+[sub_resource type="StandardMaterial3D" id="stone_mat"]
+albedo_color = Color(0.65, 0.62, 0.58, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="body"]
+size = Vector3(6, 12, 4)
+
+[sub_resource type="PrismMesh" id="roof"]
+size = Vector3(7, 2.5, 5)
+
+[sub_resource type="CylinderMesh" id="column"]
+top_radius = 0.35
+bottom_radius = 0.45
+height = 10
+
+[node name="ClassicalMonument" type="Node3D"]
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("body")
+material_override = SubResource("stone_mat")
+position = Vector3(0, 6, 0)
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+mesh = SubResource("roof")
+material_override = SubResource("stone_mat")
+position = Vector3(0, 13.25, 0)
+
+[node name="Column1" type="MeshInstance3D" parent="."]
+mesh = SubResource("column")
+material_override = SubResource("stone_mat")
+position = Vector3(-2, 5, 2.5)
+
+[node name="Column2" type="MeshInstance3D" parent="."]
+mesh = SubResource("column")
+material_override = SubResource("stone_mat")
+position = Vector3(-0.7, 5, 2.5)
+
+[node name="Column3" type="MeshInstance3D" parent="."]
+mesh = SubResource("column")
+material_override = SubResource("stone_mat")
+position = Vector3(0.7, 5, 2.5)
+
+[node name="Column4" type="MeshInstance3D" parent="."]
+mesh = SubResource("column")
+material_override = SubResource("stone_mat")
+position = Vector3(2, 5, 2.5)
