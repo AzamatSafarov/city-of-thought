@@ -40,6 +40,29 @@ var polyhaven_props: Array = [
     "res://assets/models/polyhaven/tree_stump_01/tree_stump_01_1k.gltf"
 ]
 
+# ==== POLYHAVEN INFRASTRUCTURE (CC0) ====
+var polyhaven_lights: Array = [
+    "res://assets/models/polyhaven/street_lamp_01/street_lamp_01_1k.gltf",
+    "res://assets/models/polyhaven/street_lamp_02/street_lamp_02_1k.gltf",
+    "res://assets/models/polyhaven/wooden_lantern_01/wooden_lantern_01_1k.gltf",
+    "res://assets/models/polyhaven/brass_diya_lantern/brass_diya_lantern_1k.gltf"
+]
+var polyhaven_street_deco: Array = [
+    "res://assets/models/polyhaven/horse_statue_01/horse_statue_01_1k.gltf",
+    "res://assets/models/polyhaven/concrete_cat_statue/concrete_cat_statue_1k.gltf",
+    "res://assets/models/polyhaven/wooden_barrels_01/wooden_barrels_01_1k.gltf",
+    "res://assets/models/polyhaven/wooden_crate_02/wooden_crate_02_1k.gltf",
+    "res://assets/models/polyhaven/treasure_chest/treasure_chest_1k.gltf",
+    "res://assets/models/polyhaven/vintage_grandfather_clock_01/vintage_grandfather_clock_01_1k.gltf"
+]
+var polyhaven_street_furniture: Array = [
+    "res://assets/models/polyhaven/wooden_picnic_table/wooden_picnic_table_1k.gltf",
+    "res://assets/models/polyhaven/outdoor_table_chair_set_01/outdoor_table_chair_set_01_1k.gltf"
+]
+var polyhaven_fences: Array = [
+    "res://assets/models/polyhaven/modular_chainlink_fence/modular_chainlink_fence_1k.gltf"
+]
+
 # ==== ENTRY POINT ====
 func _ready():
     rng.randomize()
@@ -890,31 +913,50 @@ func _load_gltf(path: String) -> Node3D:
     return null
 
 func _scatter_decorations(parent: Node3D, gs: int, bs: float):
-    """Разбрасываем камни, пни, папоротники по карте"""
-    var deco_count = int(gs * gs * 0.3)
+    """Разбрасываем камни, пни, папоротники, статуи, бочки, ящики, мебель по карте"""
+    var deco_count = int(gs * gs * 0.6)
     for i in range(deco_count):
         var x = rng.randi() % gs
         var z = rng.randi() % gs
         var cell = Vector2i(x, z)
         var occ = occupied_cells.get(cell, "")
-        if occ == "park" or occ == "" or occ == "building":
+        if occ == "park" or occ == "" or occ == "building" or occ == "road":
             var world_pos = Vector3(x * bs + bs/2 + rng.randf()*4-2, 0, z * bs + bs/2 + rng.randf()*4-2)
-            _place_random_deco(parent, world_pos)
+            _place_random_deco(parent, world_pos, occ == "park")
 
-func _place_random_deco(parent: Node3D, pos: Vector3):
+func _place_random_deco(parent: Node3D, pos: Vector3, is_park: bool = false):
     var roll = rng.randf()
     var deco: Node3D = null
-    if roll < 0.3 and polyhaven_rocks.size() > 0:
+    
+    if roll < 0.12 and polyhaven_rocks.size() > 0:
         # Камень
         deco = _load_gltf(polyhaven_rocks[rng.randi() % polyhaven_rocks.size()])
         if deco:
             var s = 0.6 + rng.randf() * 0.8
             deco.scale = Vector3(s, s, s)
-    elif roll < 0.5 and polyhaven_props.size() > 0:
+    elif roll < 0.22 and polyhaven_props.size() > 0:
         # Пень или папоротник
         deco = _load_gltf(polyhaven_props[rng.randi() % polyhaven_props.size()])
+        if deco:
+            var s = 0.8 + rng.randf() * 0.5
+            deco.scale = Vector3(s, s, s)
+    elif roll < 0.30 and polyhaven_street_deco.size() > 0:
+        # Статуя, бочки, ящик, сундук
+        deco = _load_gltf(polyhaven_street_deco[rng.randi() % polyhaven_street_deco.size()])
+        if deco:
+            var s = 0.5 + rng.randf() * 0.5
+            deco.scale = Vector3(s, s, s)
+    elif is_park and roll < 0.38 and polyhaven_street_furniture.size() > 0:
+        # Столы и стулья только в парках
+        deco = _load_gltf(polyhaven_street_furniture[rng.randi() % polyhaven_street_furniture.size()])
+        if deco:
+            var s = 0.7 + rng.randf() * 0.4
+            deco.scale = Vector3(s, s, s)
+    
     if deco:
         deco.position = pos
+        # Небольшой случайный поворот
+        deco.rotation.y = rng.randf() * TAU
         parent.add_child(deco)
         var lod = get_parent().get_node_or_null("LODManager")
         if lod and lod.has_method("register_prop"):
@@ -953,6 +995,8 @@ func _gen_infrastructure():
                     _place_streetlamp(cell, bs, parent)
                 if rng.randf() < 0.1:
                     _place_bench(cell, bs, parent)
+    # Размещение заборов по границам парков
+    _place_park_fences(parent, gs, bs)
     # Clock tower for radial
     if params.layoutType == "radial":
         var tower = MeshInstance3D.new()
@@ -972,6 +1016,19 @@ func _gen_infrastructure():
         parent.add_child(spire)
 
 func _place_streetlamp(cell: Vector2i, bs: float, parent: Node3D):
+    if polyhaven_lights.size() > 0 and rng.randf() < 0.7:
+        # Используем PolyHaven модель фонаря
+        var lamp = _load_gltf(polyhaven_lights[rng.randi() % polyhaven_lights.size()])
+        if lamp:
+            lamp.position = Vector3(cell.x*bs+bs/2 + rng.randf()*2-1, 0, cell.y*bs+bs/2 + rng.randf()*2-1)
+            # Вращение стоящего объекта
+            lamp.rotation.y = rng.randf() * TAU
+            parent.add_child(lamp)
+            var lod = get_parent().get_node_or_null("LODManager")
+            if lod and lod.has_method("register_prop"):
+                lod.register_prop(lamp)
+            return
+    # Процедурный fallback
     var pole = MeshInstance3D.new()
     pole.mesh = CylinderMesh.new()
     pole.mesh.top_radius = 0.15
@@ -988,12 +1045,47 @@ func _place_streetlamp(cell: Vector2i, bs: float, parent: Node3D):
     parent.add_child(light)
 
 func _place_bench(cell: Vector2i, bs: float, parent: Node3D):
+    if polyhaven_street_furniture.size() > 0 and rng.randf() < 0.5:
+        var bench = _load_gltf(polyhaven_street_furniture[rng.randi() % polyhaven_street_furniture.size()])
+        if bench:
+            bench.position = Vector3(cell.x*bs+bs/2 + rng.randf()*2-1, 0, cell.y*bs+bs/2 + rng.randf()*4-2)
+            bench.rotation.y = rng.randf() * PI
+            var s = 0.5 + rng.randf() * 0.3
+            bench.scale = Vector3(s, s, s)
+            parent.add_child(bench)
+            var lod = get_parent().get_node_or_null("LODManager")
+            if lod and lod.has_method("register_prop"):
+                lod.register_prop(bench)
+            return
+    # Процедурный fallback
     var bench = MeshInstance3D.new()
     bench.mesh = BoxMesh.new()
     bench.mesh.size = Vector3(4, 1, 1.5)
     bench.position = Vector3(cell.x*bs+bs/2, 0.5, cell.y*bs+bs/2)
     bench.material_override = _wood_material()
     parent.add_child(bench)
+
+func _place_park_fences(parent: Node3D, gs: int, bs: float):
+    """Размещаем заборы вокруг парков через PolyHaven модель"""
+    if polyhaven_fences.size() == 0:
+        return
+    for x in range(gs-1):
+        for z in range(gs-1):
+            var cell = Vector2i(x, z)
+            var occ = occupied_cells.get(cell, "")
+            if occ == "park":
+                # Проверяем соседей — если рядом дорога или пустота, ставим забор
+                var neighbors = [Vector2i(x+1,z), Vector2i(x-1,z), Vector2i(x,z+1), Vector2i(x,z-1)]
+                for n in neighbors:
+                    if n.x >= 0 and n.x < gs and n.y >= 0 and n.y < gs:
+                        var nocc = occupied_cells.get(n, "")
+                        if nocc != "park" and rng.randf() < 0.15:
+                            var fence = _load_gltf(polyhaven_fences[0])
+                            if fence:
+                                fence.position = Vector3(x*bs+bs/2, 0, z*bs+bs/2)
+                                fence.rotation.y = 0 if abs(n.x - x) > 0 else PI/2
+                                fence.scale = Vector3(0.4, 0.4, 0.4)
+                                parent.add_child(fence)
 
 func _metal_material() -> StandardMaterial3D:
     var mat = StandardMaterial3D.new()
