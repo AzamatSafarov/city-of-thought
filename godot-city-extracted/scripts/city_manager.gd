@@ -23,6 +23,23 @@ var kenney_buildings: Array = [
     "res://assets/models/buildings/building-garage.glb"
 ]
 
+# ==== POLYHAVEN NATURE MODELS (CC0) ====
+var polyhaven_trees: Array = [
+    "res://assets/models/polyhaven/island_tree_01/island_tree_01_1k.gltf",
+    "res://assets/models/polyhaven/island_tree_02/island_tree_02_1k.gltf",
+    "res://assets/models/polyhaven/island_tree_03/island_tree_03_1k.gltf"
+]
+var polyhaven_rocks: Array = [
+    "res://assets/models/polyhaven/boulder_01/boulder_01_1k.gltf",
+    "res://assets/models/polyhaven/rock_moss_set_01/rock_moss_set_01_1k.gltf",
+    "res://assets/models/polyhaven/rock_moss_set_02/rock_moss_set_02_1k.gltf"
+]
+var polyhaven_props: Array = [
+    "res://assets/models/polyhaven/dead_tree_trunk/dead_tree_trunk_1k.gltf",
+    "res://assets/models/polyhaven/fern_02/fern_02_1k.gltf",
+    "res://assets/models/polyhaven/tree_stump_01/tree_stump_01_1k.gltf"
+]
+
 # ==== ENTRY POINT ====
 func _ready():
     rng.randomize()
@@ -776,11 +793,47 @@ func _gen_vegetation():
         var cell = Vector2i(x, z)
         var occ = occupied_cells.get(cell, "")
         if occ == "park" or occ == "" or occ == "building":
-            var tree = _create_tree()
-            tree.position = Vector3(x * bs + bs/2 + rng.randf()*4-2, 0, z * bs + bs/2 + rng.randf()*4-2)
-            parent.add_child(tree)
+            var world_pos = Vector3(x * bs + bs/2 + rng.randf()*4-2, 0, z * bs + bs/2 + rng.randf()*4-2)
+            # Определяем тип и создаём
+            var tree_type = _pick_tree_type(occ)
+            var tree = _create_tree_by_type(tree_type, world_pos)
+            if tree:
+                tree.position = world_pos
+                parent.add_child(tree)
+                # LOD регистрация
+                # LOD регистрация
+                var lod = get_parent().get_node_or_null("LODManager")
+                if lod and lod.has_method("register_tree"):
+                        lod.register_tree(tree)
+    # Добавляем декорации — камни, пни, папоротники
+    _scatter_decorations(parent, gs, bs)
 
-func _create_tree() -> Node3D:
+func _pick_tree_type(occ: String) -> String:
+    var roll = rng.randf()
+    if polyhaven_trees.size() > 0 and roll < 0.5:
+        return "polyhaven"
+    if occ == "park":
+        return params.vegetationType  # процедурный
+    return "polyhaven" if rng.randf() < 0.3 else params.vegetationType
+
+func _create_tree_by_type(ttype: String, pos: Vector3) -> Node3D:
+    if ttype == "polyhaven":
+        return _load_polyhaven_tree()
+    else:
+        return _create_tree_procedural(ttype)
+
+func _load_polyhaven_tree() -> Node3D:
+    # Выбираем случайное дерево из PolyHaven
+    var idx = rng.randi() % polyhaven_trees.size()
+    var path = polyhaven_trees[idx]
+    var inst = _load_gltf(path)
+    if inst:
+        # Масштабируем для вписания в карту
+        var scale = 0.8 + rng.randf() * 0.5
+        inst.scale = Vector3(scale, scale, scale)
+    return inst
+
+func _create_tree_procedural(treetype: String) -> Node3D:
     var root = Node3D.new()
     var trunk = MeshInstance3D.new()
     trunk.mesh = CylinderMesh.new()
@@ -792,7 +845,7 @@ func _create_tree() -> Node3D:
     root.add_child(trunk)
 
     var crown = MeshInstance3D.new()
-    match params.vegetationType:
+    match treetype:
         "coniferous":
             crown.mesh = CylinderMesh.new()
             crown.mesh.top_radius = 0.0
@@ -816,6 +869,56 @@ func _create_tree() -> Node3D:
     crown.material_override = _crown_material()
     root.add_child(crown)
     return root
+
+func _load_gltf(path: String) -> Node3D:
+    # GLTF (text) с внешними ресурсами: через GLTFDocument
+    if path.ends_with(".gltf"):
+        var doc = GLTFDocument.new()
+        var state = GLTFState.new()
+        var err = doc.append_from_file(path, state)
+        if err == OK:
+            var scene = doc.generate_scene(state)
+            if scene:
+                return scene
+        return null
+    # GLB (binary single-file): direct load
+    var scene = load(path)
+    if scene:
+        var inst = scene.instantiate()
+        if inst:
+            return inst
+    return null
+
+func _scatter_decorations(parent: Node3D, gs: int, bs: float):
+    """Разбрасываем камни, пни, папоротники по карте"""
+    var deco_count = int(gs * gs * 0.3)
+    for i in range(deco_count):
+        var x = rng.randi() % gs
+        var z = rng.randi() % gs
+        var cell = Vector2i(x, z)
+        var occ = occupied_cells.get(cell, "")
+        if occ == "park" or occ == "" or occ == "building":
+            var world_pos = Vector3(x * bs + bs/2 + rng.randf()*4-2, 0, z * bs + bs/2 + rng.randf()*4-2)
+            _place_random_deco(parent, world_pos)
+
+func _place_random_deco(parent: Node3D, pos: Vector3):
+    var roll = rng.randf()
+    var deco: Node3D = null
+    if roll < 0.3 and polyhaven_rocks.size() > 0:
+        # Камень
+        deco = _load_gltf(polyhaven_rocks[rng.randi() % polyhaven_rocks.size()])
+        if deco:
+            var s = 0.6 + rng.randf() * 0.8
+            deco.scale = Vector3(s, s, s)
+    elif roll < 0.5 and polyhaven_props.size() > 0:
+        # Пень или папоротник
+        deco = _load_gltf(polyhaven_props[rng.randi() % polyhaven_props.size()])
+    if deco:
+        deco.position = pos
+        parent.add_child(deco)
+        var lod = get_parent().get_node_or_null("LODManager")
+        if lod and lod.has_method("register_prop"):
+            lod.register_prop(deco)
 
 func _trunk_material() -> StandardMaterial3D:
     var mat = StandardMaterial3D.new()
